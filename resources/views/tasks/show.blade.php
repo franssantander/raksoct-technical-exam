@@ -41,6 +41,34 @@
                             </a>
                         </div>
                     @endif
+                    {{-- Comments --}}
+                    <form action="{{ route('tasks.comments.store', $task) }}" method="POST" class="mb-6">
+                        @csrf
+                        <textarea name="comment" rows="3" class="w-full border rounded px-3 py-2" placeholder="Add a comment...">{{ old('comment') }}</textarea>
+                        @error('comment')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                        <button type="submit">
+                            <x-primary-button>
+                                Add Comment
+                            </x-primary-button>
+                        </button>
+                    </form>
+                </div>
+
+
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-lg mb-2">Comments</h3>
+                    @forelse($task->comments as $comment)
+                        <div class="border rounded p-4 bg-gray-50">
+                            <p class="text-sm text-gray-800">{{ $comment->comment }}</p>
+                            <div class="text-xs text-gray-500 mt-1">
+                                — {{ $comment->user->name }} • {{ $comment->created_at->diffForHumans() }}
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-600">No comments yet.</p>
+                    @endforelse
                 </div>
 
                 <div class="mt-6 flex gap-2">
